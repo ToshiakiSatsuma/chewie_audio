@@ -16,7 +16,11 @@ dependencies:
   cupertino_icons: ^1.0.2
   flutter:
     sdk: flutter
-  video_player: ^2.0.0
+  video_player:
+    git:
+      url: https://github.com/matsudakrh/plugins.git
+      path: packages/video_player/video_player
+      ref: video_player_android_rotation
 
 dev_dependencies:
   flutter_test:
