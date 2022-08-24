@@ -1,9 +1,11 @@
 import 'dart:async';
 
 import 'package:chewie_audio/src/chewie_progress_colors.dart';
+import 'package:chewie_audio/src/notifiers/play_notifier.dart';
 import 'package:chewie_audio/src/player_with_controls.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
 
 typedef ChewieRoutePageBuilder = Widget Function(
@@ -30,7 +32,10 @@ class ChewieAudio extends StatelessWidget {
   Widget build(BuildContext context) {
     return _ChewieAudioControllerProvider(
       controller: controller,
-      child: const PlayerWithControls(),
+      child: ChangeNotifierProvider<PlayerNotifier>.value(
+        value: PlayerNotifier.init(),
+        builder: (context, w) => const PlayerWithControls(),
+      ),
     );
   }
 }
@@ -48,6 +53,7 @@ class ChewieAudio extends StatelessWidget {
 class ChewieAudioController extends ChangeNotifier {
   ChewieAudioController({
     required this.videoPlayerController,
+    this.thumbnail = const SizedBox.shrink(),
     this.autoInitialize = false,
     this.autoPlay = false,
     this.startAt,
@@ -56,6 +62,7 @@ class ChewieAudioController extends ChangeNotifier {
     this.materialProgressColors,
     this.showControls = true,
     this.customControls,
+    this.showOptions = true,
     this.errorBuilder,
     this.isLive = false,
     this.allowMuting = true,
@@ -68,6 +75,8 @@ class ChewieAudioController extends ChangeNotifier {
 
   /// The controller for the video you want to play
   final VideoPlayerController videoPlayerController;
+
+  final Widget thumbnail;
 
   /// Initialize the Video on Startup. This will prep the video for playback.
   final bool autoInitialize;
@@ -87,6 +96,10 @@ class ChewieAudioController extends ChangeNotifier {
   /// Defines customised controls. Check [MaterialControls] or
   /// [CupertinoControls] for reference.
   final Widget? customControls;
+
+  /// If false, the options button in MaterialUI and MaterialDesktopUI
+  /// won't be shown.
+  final bool showOptions;
 
   /// When the video playback runs into an error, you can build a custom
   /// error message.

@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:math' as math;
 import 'dart:ui' as ui;
 
-import 'package:chewie_audio/src/animated_play_pause.dart';
+import 'package:chewie_audio/src/view/controller/animated_play_pause.dart';
 import 'package:chewie_audio/src/chewie_player.dart';
 import 'package:chewie_audio/src/chewie_progress_colors.dart';
 import 'package:chewie_audio/src/cupertino_progress_bar.dart';

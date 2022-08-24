@@ -23,50 +23,31 @@ class ChewieAudioDemo extends StatefulWidget {
 
 class _ChewieAudioDemoState extends State<ChewieAudioDemo> {
   TargetPlatform? _platform;
-  late VideoPlayerController _videoPlayerController1;
-  late VideoPlayerController _videoPlayerController2;
-  ChewieAudioController? _chewieAudioController;
+  late VideoPlayerController _videoPlayerController;
+  late ChewieAudioController _chewieAudioController;
 
   @override
   void initState() {
     super.initState();
-    initializePlayer();
   }
 
   @override
   void dispose() {
-    _videoPlayerController1.dispose();
-    _videoPlayerController2.dispose();
-    _chewieAudioController!.dispose();
+    _videoPlayerController.dispose();
+    _chewieAudioController.dispose();
     super.dispose();
   }
 
   Future<void> initializePlayer() async {
-    _videoPlayerController1 = VideoPlayerController.network(
-        'https://www.w3schools.com/html/mov_bbb.mp4');
-    _videoPlayerController2 = VideoPlayerController.network(
-        'https://assets.mixkit.co/videos/preview/mixkit-a-girl-blowing-a-bubble-gum-at-an-amusement-park-1226-large.mp4');
-    await Future.wait([
-      _videoPlayerController1.initialize(),
-      _videoPlayerController2.initialize()
-    ]);
+    _videoPlayerController = VideoPlayerController.network('https://www.w3schools.com/html/mov_bbb.mp4');
+    await _videoPlayerController.initialize();
     _chewieAudioController = ChewieAudioController(
-      videoPlayerController: _videoPlayerController1,
-      autoPlay: true,
-      looping: true,
-      // Try playing around with some of these other options:
-
-      // showControls: false,
-      // materialProgressColors: ChewieProgressColors(
-      //   playedColor: Colors.red,
-      //   handleColor: Colors.blue,
-      //   backgroundColor: Colors.grey,
-      //   bufferedColor: Colors.lightGreen,
-      // ),
-      // placeholder: Container(
-      //   color: Colors.grey,
-      // ),
-      // autoInitialize: true,
+      thumbnail: Container(
+        width: double.infinity,
+        height: 200,
+        color: Colors.red,
+      ),
+      videoPlayerController: _videoPlayerController,
     );
   }
 
@@ -85,94 +66,28 @@ class _ChewieAudioDemoState extends State<ChewieAudioDemo> {
           children: <Widget>[
             Expanded(
               child: Center(
-                child: _chewieAudioController != null && _chewieAudioController!.videoPlayerController.value.isInitialized
-                    ? ChewieAudio(
-                        controller: _chewieAudioController!,
-                      )
-                    : Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
-                          CircularProgressIndicator(),
-                          SizedBox(height: 20),
-                          Text('Loading'),
-                        ],
-                      ),
+                child: FutureBuilder<void>(
+                  future: initializePlayer(),
+                  builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
+                    return Center(
+                      child: snapshot.connectionState == ConnectionState.done &&
+                              _chewieAudioController.videoPlayerController.value.isInitialized
+                          ? ChewieAudio(
+                              controller: _chewieAudioController,
+                            )
+                          : Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: const [
+                                CircularProgressIndicator(),
+                                SizedBox(height: 20),
+                                Text('Loading'),
+                              ],
+                            ),
+                    );
+                  },
+                ),
               ),
             ),
-            Row(
-              children: <Widget>[
-                Expanded(
-                  child: TextButton(
-                    onPressed: () {
-                      setState(() {
-                        if (_chewieAudioController != null) _chewieAudioController!.dispose();
-                        _videoPlayerController1.pause();
-                        _videoPlayerController1.seekTo(const Duration());
-                        _chewieAudioController = ChewieAudioController(
-                          videoPlayerController: _videoPlayerController1,
-                          autoPlay: true,
-                          looping: true,
-                        );
-                      });
-                    },
-                    child: const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 16.0),
-                      child: Text("Audio 1"),
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: TextButton(
-                    onPressed: () {
-                      setState(() {
-                        if (_chewieAudioController != null) _chewieAudioController!.dispose();
-                        _videoPlayerController2.pause();
-                        _videoPlayerController2.seekTo(const Duration());
-                        _chewieAudioController = ChewieAudioController(
-                          videoPlayerController: _videoPlayerController2,
-                          autoPlay: true,
-                          looping: true,
-                        );
-                      });
-                    },
-                    child: const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 16.0),
-                      child: Text("Audio 2"),
-                    ),
-                  ),
-                )
-              ],
-            ),
-            Row(
-              children: <Widget>[
-                Expanded(
-                  child: TextButton(
-                    onPressed: () {
-                      setState(() {
-                        _platform = TargetPlatform.android;
-                      });
-                    },
-                    child: const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 16.0),
-                      child: Text("Android controls"),
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: TextButton(
-                    onPressed: () {
-                      setState(() {
-                        _platform = TargetPlatform.iOS;
-                      });
-                    },
-                    child: const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 16.0),
-                      child: Text("iOS controls"),
-                    ),
-                  ),
-                )
-              ],
-            )
           ],
         ),
       ),
