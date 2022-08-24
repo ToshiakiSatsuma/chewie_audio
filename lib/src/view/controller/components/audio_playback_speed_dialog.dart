@@ -1,4 +1,3 @@
-import 'package:chewie_audio/src/utils.dart';
 import 'package:flutter/material.dart';
 
 class AudioPlaybackSpeedDialog extends StatelessWidget {

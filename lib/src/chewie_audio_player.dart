@@ -24,13 +24,13 @@ class ChewieAudioPlayer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ChewieAudioController chewieController = ChewieAudioController.of(context);
-
     return ChewieAudioControllerProvider(
       controller: controller,
       child: ChangeNotifierProvider<PlayerNotifier>.value(
         value: PlayerNotifier.init(),
         builder: (context, w) {
+          final ChewieAudioController chewieController = ChewieAudioController.of(context);
+
           return Center(
             child: SizedBox(
               width: MediaQuery.of(context).size.width,

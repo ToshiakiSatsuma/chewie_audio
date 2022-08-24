@@ -64,7 +64,6 @@ class _AudioProgressBarState extends State<AudioProgressBar> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     return GestureDetector(

@@ -1,22 +1,17 @@
 import 'dart:async';
 
-import 'package:chewie_audio/src/view/controller/components/animated_play_pause.dart';
 import 'package:chewie_audio/src/chewie_audio_player.dart';
 import 'package:chewie_audio/src/chewie_progress_colors.dart';
+import 'package:chewie_audio/src/notifiers/play_notifier.dart';
+import 'package:chewie_audio/src/view/controller/components/audio_play_button.dart';
 import 'package:chewie_audio/src/view/controller/components/audio_progress_bar.dart';
-import 'package:chewie_audio/src/utils.dart';
-import 'package:chewie_audio/src/view/controller/components/audio_mute_button.dart';
 import 'package:chewie_audio/src/view/controller/components/audio_option_dialog.dart';
 import 'package:chewie_audio/src/view/controller/components/audio_option_item.dart';
 import 'package:chewie_audio/src/view/controller/components/audio_playback_speed_dialog.dart';
-import 'package:chewie_audio/src/view/controller/components/audio_speed_button.dart';
 import 'package:chewie_audio/src/view/controller/components/audio_time_position.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
-
-import 'components/audio_play_button.dart';
-import '../../notifiers/play_notifier.dart';
 
 class AudioController extends StatefulWidget {
   const AudioController({Key? key}) : super(key: key);
