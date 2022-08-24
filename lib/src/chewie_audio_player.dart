@@ -34,15 +34,18 @@ class ChewieAudioPlayer extends StatelessWidget {
           return Center(
             child: AspectRatio(
               aspectRatio: chewieAudioController.aspectRatio,
-              child: Stack(
-                alignment: Alignment.center,
-                children: <Widget>[
-                  chewieAudioController.thumbnail,
-                  if (chewieAudioController.showControls)
-                    chewieAudioController.customControls ?? const AudioController()
-                  else
-                    Container(),
-                ],
+              child: ColoredBox(
+                color: chewieAudioController.backgroundColor,
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: <Widget>[
+                    chewieAudioController.thumbnail,
+                    if (chewieAudioController.showControls)
+                      chewieAudioController.customControls ?? const AudioController()
+                    else
+                      Container(),
+                  ],
+                ),
               ),
             ),
           );
@@ -66,6 +69,7 @@ class ChewieAudioController extends ChangeNotifier {
   ChewieAudioController({
     required this.videoPlayerController,
     this.thumbnail = const SizedBox.shrink(),
+    this.backgroundColor = Colors.white,
     this.autoInitialize = false,
     this.autoPlay = false,
     this.startAt,
@@ -89,6 +93,8 @@ class ChewieAudioController extends ChangeNotifier {
   final VideoPlayerController videoPlayerController;
 
   final Widget thumbnail;
+
+  final Color backgroundColor;
 
   /// Initialize the Video on Startup. This will prep the video for playback.
   final bool autoInitialize;
