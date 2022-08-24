@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:chewie_audio/src/view/controller/components/animated_play_pause.dart';
-import 'package:chewie_audio/src/chewie_player.dart';
+import 'package:chewie_audio/src/chewie_audio_player.dart';
 import 'package:chewie_audio/src/chewie_progress_colors.dart';
 import 'package:chewie_audio/src/view/controller/components/audio_progress_bar.dart';
 import 'package:chewie_audio/src/utils.dart';
@@ -249,7 +249,7 @@ class _AudioControllerState extends State<AudioController> with SingleTickerProv
           horizontal: 20.0,
         ),
         child: AudioProgressBar(
-          controller,
+          controller: controller,
           onDragStart: () {
             setState(() {
               _dragging = true;
@@ -266,10 +266,14 @@ class _AudioControllerState extends State<AudioController> with SingleTickerProv
           },
           colors: chewieController.materialProgressColors ??
               ChewieProgressColors(
-                  playedColor: Theme.of(context).accentColor,
-                  handleColor: Theme.of(context).accentColor,
-                  bufferedColor: Theme.of(context).backgroundColor,
-                  backgroundColor: Theme.of(context).disabledColor),
+                playedColor: Theme.of(context).accentColor,
+                handleColor: Theme.of(context).accentColor,
+                bufferedColor: Theme.of(context).backgroundColor,
+                backgroundColor: Theme.of(context).disabledColor,
+              ),
+          barHeight: 2,
+          handleHeight: 6,
+          drawShadow: false,
         ),
       ),
     );

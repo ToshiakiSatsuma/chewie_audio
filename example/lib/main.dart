@@ -72,7 +72,7 @@ class _ChewieAudioDemoState extends State<ChewieAudioDemo> {
                     return Center(
                       child: snapshot.connectionState == ConnectionState.done &&
                               _chewieAudioController.videoPlayerController.value.isInitialized
-                          ? ChewieAudio(
+                          ? ChewieAudioPlayer(
                               controller: _chewieAudioController,
                             )
                           : Column(

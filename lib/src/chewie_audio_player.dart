@@ -1,8 +1,10 @@
 import 'dart:async';
 
+import 'package:chewie_audio/chewie_audio.dart';
 import 'package:chewie_audio/src/chewie_progress_colors.dart';
 import 'package:chewie_audio/src/notifiers/play_notifier.dart';
 import 'package:chewie_audio/src/player_with_controls.dart';
+import 'package:chewie_audio/src/providers/audio_controller_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
@@ -12,15 +14,15 @@ typedef ChewieRoutePageBuilder = Widget Function(
   BuildContext context,
   Animation<double> animation,
   Animation<double> secondaryAnimation,
-  _ChewieAudioControllerProvider controllerProvider,
+  ChewieAudioControllerProvider controllerProvider,
 );
 
 /// An Audio Player with Material and Cupertino skins.
 ///
 /// `video_player` is pretty low level. ChewieAudio wraps it in a friendly skin to
 /// make it easy to use!
-class ChewieAudio extends StatelessWidget {
-  const ChewieAudio({
+class ChewieAudioPlayer extends StatelessWidget {
+  const ChewieAudioPlayer({
     Key? key,
     required this.controller,
   }) : super(key: key);
@@ -30,11 +32,30 @@ class ChewieAudio extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _ChewieAudioControllerProvider(
+    final ChewieAudioController chewieController = ChewieAudioController.of(context);
+
+    return ChewieAudioControllerProvider(
       controller: controller,
       child: ChangeNotifierProvider<PlayerNotifier>.value(
         value: PlayerNotifier.init(),
-        builder: (context, w) => const PlayerWithControls(),
+        builder: (context, w) {
+          return Center(
+            child: SizedBox(
+              width: MediaQuery.of(context).size.width,
+              height: 200,
+              child: Stack(
+                alignment: Alignment.bottomCenter,
+                children: <Widget>[
+                  chewieController.thumbnail,
+                  if (chewieController.showControls)
+                    chewieController.customControls ?? const AudioController()
+                  else
+                    Container(),
+                ],
+              ),
+            ),
+          );
+        },
       ),
     );
   }
@@ -68,8 +89,7 @@ class ChewieAudioController extends ChangeNotifier {
     this.allowMuting = true,
     this.allowPlaybackSpeedChanging = true,
     this.playbackSpeeds = const [0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2],
-  }) : assert(playbackSpeeds.every((speed) => speed > 0),
-            'The playbackSpeeds values must all be greater than 0') {
+  }) : assert(playbackSpeeds.every((speed) => speed > 0), 'The playbackSpeeds values must all be greater than 0') {
     _initialize();
   }
 
@@ -103,8 +123,7 @@ class ChewieAudioController extends ChangeNotifier {
 
   /// When the video playback runs into an error, you can build a custom
   /// error message.
-  final Widget Function(BuildContext context, String? errorMessage)?
-    errorBuilder;
+  final Widget Function(BuildContext context, String? errorMessage)? errorBuilder;
 
   /// The colors to use for controls on iOS. By default, the iOS player uses
   /// colors sampled from the original iOS 11 designs.
@@ -127,8 +146,7 @@ class ChewieAudioController extends ChangeNotifier {
   final List<double> playbackSpeeds;
 
   static ChewieAudioController of(BuildContext context) {
-    final chewieAudioControllerProvider = context
-        .dependOnInheritedWidgetOfExactType<_ChewieAudioControllerProvider>()!;
+    final chewieAudioControllerProvider = context.dependOnInheritedWidgetOfExactType<ChewieAudioControllerProvider>()!;
 
     return chewieAudioControllerProvider.controller;
   }
@@ -138,8 +156,7 @@ class ChewieAudioController extends ChangeNotifier {
   Future _initialize() async {
     await videoPlayerController.setLooping(looping);
 
-    if ((autoInitialize || autoPlay) &&
-        !videoPlayerController.value.isInitialized) {
+    if ((autoInitialize || autoPlay) && !videoPlayerController.value.isInitialized) {
       await videoPlayerController.initialize();
     }
 
@@ -176,18 +193,4 @@ class ChewieAudioController extends ChangeNotifier {
   Future<void> setVolume(double volume) async {
     await videoPlayerController.setVolume(volume);
   }
-}
-
-class _ChewieAudioControllerProvider extends InheritedWidget {
-  const _ChewieAudioControllerProvider({
-    Key? key,
-    required this.controller,
-    required Widget child,
-  }) : super(key: key, child: child);
-
-  final ChewieAudioController controller;
-
-  @override
-  bool updateShouldNotify(_ChewieAudioControllerProvider old) =>
-      controller != old.controller;
 }
