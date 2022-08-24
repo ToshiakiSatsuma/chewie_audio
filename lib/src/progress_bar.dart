@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:video_player/video_player.dart';
 
-class VideoProgressBar extends StatefulWidget {
-  VideoProgressBar(
+class ProgressBar extends StatefulWidget {
+  ProgressBar(
     this.controller, {
     ChewieProgressColors? colors,
     this.onDragEnd,
@@ -28,12 +28,12 @@ class VideoProgressBar extends StatefulWidget {
   final bool drawShadow;
 
   @override
-  _VideoProgressBarState createState() {
-    return _VideoProgressBarState();
+  _ProgressBarState createState() {
+    return _ProgressBarState();
   }
 }
 
-class _VideoProgressBarState extends State<VideoProgressBar> {
+class _ProgressBarState extends State<ProgressBar> {
   void listener() {
     if (!mounted) return;
     setState(() {});

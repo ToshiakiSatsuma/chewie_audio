@@ -1,15 +1,13 @@
-import 'package:chewie_audio/src/view/controller/animated_play_pause.dart';
+import 'package:chewie_audio/src/view/controller/components/animated_play_pause.dart';
 import 'package:flutter/material.dart';
 
-class AudioMuteButton extends StatelessWidget {
-  const AudioMuteButton({
+class AudioSpeedButton extends StatelessWidget {
+  const AudioSpeedButton({
     Key? key,
     required this.height,
-    required this.iconData,
   }) : super(key: key);
 
   final double height;
-  final IconData iconData;
 
   @override
   Widget build(BuildContext context) {
@@ -20,9 +18,7 @@ class AudioMuteButton extends StatelessWidget {
           left: 8.0,
           right: 8.0,
         ),
-        child: Icon(
-          iconData,
-        ),
+        child: const Icon(Icons.speed),
       ),
     );
   }

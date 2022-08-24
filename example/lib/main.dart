@@ -45,7 +45,7 @@ class _ChewieAudioDemoState extends State<ChewieAudioDemo> {
       thumbnail: Container(
         width: double.infinity,
         height: 200,
-        color: Colors.red,
+        color: Colors.white,
       ),
       videoPlayerController: _videoPlayerController,
     );

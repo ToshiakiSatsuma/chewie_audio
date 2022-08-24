@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:video_player/video_player.dart';
 
-class MaterialVideoProgressBar extends StatelessWidget {
-  MaterialVideoProgressBar(
+class AudioProgressBar extends StatelessWidget {
+  AudioProgressBar(
     this.controller, {
     ChewieProgressColors? colors,
     this.onDragEnd,
@@ -23,7 +23,7 @@ class MaterialVideoProgressBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return VideoProgressBar(
+    return ProgressBar(
       controller,
       barHeight: 2,
       handleHeight: 6,

@@ -1,4 +1,4 @@
-import 'package:chewie_audio/src/view/controller/audio_option_item.dart';
+import 'package:chewie_audio/src/view/controller/components/audio_option_item.dart';
 import 'package:flutter/material.dart';
 
 class AudioOptionsDialog extends StatefulWidget {

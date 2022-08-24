@@ -1,37 +1,36 @@
 import 'dart:async';
 
-import 'package:chewie_audio/src/view/controller/animated_play_pause.dart';
+import 'package:chewie_audio/src/view/controller/components/animated_play_pause.dart';
 import 'package:chewie_audio/src/chewie_player.dart';
 import 'package:chewie_audio/src/chewie_progress_colors.dart';
-import 'package:chewie_audio/src/material_progress_bar.dart';
+import 'package:chewie_audio/src/view/controller/components/audio_progress_bar.dart';
 import 'package:chewie_audio/src/utils.dart';
-import 'package:chewie_audio/src/view/controller/audio_mute_button.dart';
-import 'package:chewie_audio/src/view/controller/audio_option_dialog.dart';
-import 'package:chewie_audio/src/view/controller/audio_option_item.dart';
-import 'package:chewie_audio/src/view/controller/audio_playback_speed_dialog.dart';
-import 'package:chewie_audio/src/view/controller/audio_speed_button.dart';
-import 'package:chewie_audio/src/view/controller/audio_time_position.dart';
+import 'package:chewie_audio/src/view/controller/components/audio_mute_button.dart';
+import 'package:chewie_audio/src/view/controller/components/audio_option_dialog.dart';
+import 'package:chewie_audio/src/view/controller/components/audio_option_item.dart';
+import 'package:chewie_audio/src/view/controller/components/audio_playback_speed_dialog.dart';
+import 'package:chewie_audio/src/view/controller/components/audio_speed_button.dart';
+import 'package:chewie_audio/src/view/controller/components/audio_time_position.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
 
-import 'audio_play_button.dart';
+import 'components/audio_play_button.dart';
 import '../../notifiers/play_notifier.dart';
 
-class MaterialController extends StatefulWidget {
-  const MaterialController({Key? key}) : super(key: key);
+class AudioController extends StatefulWidget {
+  const AudioController({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
-    return _MaterialControllerState();
+    return _AudioControllerState();
   }
 }
 
-class _MaterialControllerState extends State<MaterialController> with SingleTickerProviderStateMixin {
+class _AudioControllerState extends State<AudioController> with SingleTickerProviderStateMixin {
   late PlayerNotifier notifier;
   late VideoPlayerValue _latestValue;
   Timer? _hideTimer;
-  Timer? _initTimer;
   Timer? _showAfterExpandCollapseTimer;
   bool _dragging = false;
   bool _displayTapped = false;
@@ -108,7 +107,12 @@ class _MaterialControllerState extends State<MaterialController> with SingleTick
               if (chewieController.showOptions)
                 Positioned(
                   bottom: 0,
-                  child: _buildBottomBar(context),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 30,
+                    ),
+                    child: _buildBottomBar(context),
+                  ),
                 ),
             ],
           ),
@@ -212,6 +216,7 @@ class _MaterialControllerState extends State<MaterialController> with SingleTick
       opacity: notifier.hideStuff ? 0.0 : 1.0,
       duration: const Duration(milliseconds: 300),
       child: SizedBox(
+        width: MediaQuery.of(context).size.width,
         height: barHeight,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -243,7 +248,7 @@ class _MaterialControllerState extends State<MaterialController> with SingleTick
         padding: const EdgeInsets.symmetric(
           horizontal: 20.0,
         ),
-        child: MaterialVideoProgressBar(
+        child: AudioProgressBar(
           controller,
           onDragStart: () {
             setState(() {
@@ -325,7 +330,6 @@ class _MaterialControllerState extends State<MaterialController> with SingleTick
   void _dispose() {
     controller.removeListener(_updateState);
     _hideTimer?.cancel();
-    _initTimer?.cancel();
     _showAfterExpandCollapseTimer?.cancel();
   }
 
@@ -374,4 +378,52 @@ class _MaterialControllerState extends State<MaterialController> with SingleTick
 //     ),
 //   );
 // }
+}
+
+class _PlaybackSpeedDialog extends StatelessWidget {
+  const _PlaybackSpeedDialog({
+    Key? key,
+    required List<double> speeds,
+    required double selected,
+  })  : _speeds = speeds,
+        _selected = selected,
+        super(key: key);
+
+  final List<double> _speeds;
+  final double _selected;
+
+  @override
+  Widget build(BuildContext context) {
+    final Color selectedColor = Theme.of(context).primaryColor;
+
+    return ListView.builder(
+      shrinkWrap: true,
+      physics: const ScrollPhysics(),
+      itemBuilder: (context, index) {
+        final _speed = _speeds[index];
+        return ListTile(
+          dense: true,
+          title: Row(
+            children: [
+              if (_speed == _selected)
+                Icon(
+                  Icons.check,
+                  size: 20.0,
+                  color: selectedColor,
+                )
+              else
+                Container(width: 20.0),
+              const SizedBox(width: 16.0),
+              Text(_speed.toString()),
+            ],
+          ),
+          selected: _speed == _selected,
+          onTap: () {
+            Navigator.of(context).pop(_speed);
+          },
+        );
+      },
+      itemCount: _speeds.length,
+    );
+  }
 }

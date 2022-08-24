@@ -1,4 +1,4 @@
-import 'package:chewie_audio/src/view/controller/animated_play_pause.dart';
+import 'package:chewie_audio/src/view/controller/components/animated_play_pause.dart';
 import 'package:flutter/material.dart';
 
 class AudioPlayButton extends StatelessWidget {
