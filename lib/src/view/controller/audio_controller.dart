@@ -89,27 +89,31 @@ class _AudioControllerState extends State<AudioController> with SingleTickerProv
         onTap: () => _cancelAndRestartTimer(),
         child: AbsorbPointer(
           absorbing: notifier.hideStuff,
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              _buildHitArea(),
-              if (chewieController.showOptions)
-                Positioned(
-                  top: 0,
-                  right: 0,
-                  child: _buildOptionsButton(),
-                ),
-              if (chewieController.showOptions)
-                Positioned(
-                  bottom: 0,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 30,
-                    ),
-                    child: _buildBottomBar(context),
+          child: AnimatedOpacity(
+            opacity: notifier.hideStuff ? 0.0 : 1.0,
+            duration: const Duration(milliseconds: 300),
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                _buildHitArea(),
+                if (chewieController.showOptions)
+                  Positioned(
+                    top: 0,
+                    right: 0,
+                    child: _buildOptionsButton(),
                   ),
-                ),
-            ],
+                if (chewieController.showOptions)
+                  Positioned(
+                    bottom: 0,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 30,
+                      ),
+                      child: _buildBottomBar(context),
+                    ),
+                  ),
+              ],
+            ),
           ),
         ),
       ),
@@ -137,67 +141,65 @@ class _AudioControllerState extends State<AudioController> with SingleTickerProv
           });
         }
       },
-      child: AudioPlayButton(
-        backgroundColor: Colors.black54,
-        iconColor: Colors.white,
-        isFinished: isFinished,
-        isPlaying: controller.value.isPlaying,
-        show: !_dragging && !notifier.hideStuff,
-        onPressed: _playPause,
+      child: AnimatedOpacity(
+        opacity: _dragging ? 0.0 : 1.0,
+        duration: const Duration(milliseconds: 300),
+        child: AudioPlayButton(
+          backgroundColor: Colors.black54,
+          iconColor: Colors.white,
+          isFinished: isFinished,
+          isPlaying: controller.value.isPlaying,
+          show: !_dragging && !notifier.hideStuff,
+          onPressed: _playPause,
+        ),
       ),
     );
   }
 
   Widget _buildOptionsButton() {
-    final options = <AudioOptionItem>[
-      AudioOptionItem(
-        onTap: () async {
-          Navigator.pop(context);
-          final chosenSpeed = await showModalBottomSheet<double>(
-            context: context,
-            isScrollControlled: true,
-            useRootNavigator: true,
-            builder: (context) => AudioPlaybackSpeedDialog(
-              speeds: chewieController.playbackSpeeds,
-              selectedColor: Theme.of(context).primaryColor,
-              selected: _latestValue.playbackSpeed,
-            ),
-          );
+    return IconButton(
+      onPressed: () async {
+        _hideTimer?.cancel();
 
-          if (chosenSpeed != null) {
-            controller.setPlaybackSpeed(chosenSpeed);
-          }
-        },
-        iconData: Icons.speed,
-        title: 'Playback speed',
-      )
-    ];
+        await showModalBottomSheet<AudioOptionItem>(
+          context: context,
+          isScrollControlled: true,
+          useRootNavigator: true,
+          builder: (context) => AudioOptionsDialog(
+            options: <AudioOptionItem>[
+              AudioOptionItem(
+                onTap: () async {
+                  Navigator.pop(context);
+                  final chosenSpeed = await showModalBottomSheet<double>(
+                    context: context,
+                    isScrollControlled: true,
+                    useRootNavigator: true,
+                    builder: (context) => AudioPlaybackSpeedDialog(
+                      speeds: chewieController.playbackSpeeds,
+                      selectedColor: Theme.of(context).primaryColor,
+                      selected: _latestValue.playbackSpeed,
+                    ),
+                  );
 
-    return AnimatedOpacity(
-      opacity: notifier.hideStuff ? 0.0 : 1.0,
-      duration: const Duration(milliseconds: 250),
-      child: IconButton(
-        onPressed: () async {
-          _hideTimer?.cancel();
+                  if (chosenSpeed != null) {
+                    controller.setPlaybackSpeed(chosenSpeed);
+                  }
+                },
+                iconData: Icons.speed,
+                title: 'Playback speed',
+              )
+            ],
+            cancelButtonText: 'Cancel',
+          ),
+        );
 
-          await showModalBottomSheet<AudioOptionItem>(
-            context: context,
-            isScrollControlled: true,
-            useRootNavigator: true,
-            builder: (context) => AudioOptionsDialog(
-              options: options,
-              cancelButtonText: 'Cancel',
-            ),
-          );
-
-          if (_latestValue.isPlaying) {
-            _startHideTimer();
-          }
-        },
-        icon: const Icon(
-          Icons.more_vert,
-          color: Colors.white,
-        ),
+        if (_latestValue.isPlaying) {
+          _startHideTimer();
+        }
+      },
+      icon: const Icon(
+        Icons.more_vert,
+        color: Colors.white,
       ),
     );
   }
@@ -207,19 +209,15 @@ class _AudioControllerState extends State<AudioController> with SingleTickerProv
   ) {
     final iconColor = Theme.of(context).textTheme.button!.color;
 
-    return AnimatedOpacity(
-      opacity: notifier.hideStuff ? 0.0 : 1.0,
-      duration: const Duration(milliseconds: 300),
-      child: SizedBox(
-        width: MediaQuery.of(context).size.width,
-        height: barHeight,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildTimerPosition(iconColor),
-            _buildProgressBar(),
-          ],
-        ),
+    return SizedBox(
+      width: MediaQuery.of(context).size.width,
+      height: barHeight,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildTimerPosition(iconColor),
+          _buildProgressBar(),
+        ],
       ),
     );
   }
