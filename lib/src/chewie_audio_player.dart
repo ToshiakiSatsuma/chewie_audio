@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:chewie_audio/chewie_audio.dart';
 import 'package:chewie_audio/src/chewie_progress_colors.dart';
 import 'package:chewie_audio/src/notifiers/play_notifier.dart';
-import 'package:chewie_audio/src/player_with_controls.dart';
 import 'package:chewie_audio/src/providers/audio_controller_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';

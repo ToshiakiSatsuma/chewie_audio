@@ -1,4 +1,5 @@
 import 'package:chewie_audio/src/utils.dart';
+import 'package:chewie_audio/src/utils/string_util.dart';
 import 'package:flutter/material.dart';
 
 class AudioTimePosition extends StatelessWidget {
