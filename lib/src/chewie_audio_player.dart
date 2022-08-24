@@ -29,18 +29,17 @@ class ChewieAudioPlayer extends StatelessWidget {
       child: ChangeNotifierProvider<PlayerNotifier>.value(
         value: PlayerNotifier.init(),
         builder: (context, w) {
-          final ChewieAudioController chewieController = ChewieAudioController.of(context);
+          final ChewieAudioController chewieAudioController = ChewieAudioController.of(context);
 
           return Center(
-            child: SizedBox(
-              width: MediaQuery.of(context).size.width,
-              height: 200,
+            child: AspectRatio(
+              aspectRatio: chewieAudioController.aspectRatio,
               child: Stack(
-                alignment: Alignment.bottomCenter,
+                alignment: Alignment.center,
                 children: <Widget>[
-                  chewieController.thumbnail,
-                  if (chewieController.showControls)
-                    chewieController.customControls ?? const AudioController()
+                  chewieAudioController.thumbnail,
+                  if (chewieAudioController.showControls)
+                    chewieAudioController.customControls ?? const AudioController()
                   else
                     Container(),
                 ],
@@ -71,6 +70,7 @@ class ChewieAudioController extends ChangeNotifier {
     this.autoPlay = false,
     this.startAt,
     this.looping = false,
+    this.aspectRatio = 16 / 9,
     this.cupertinoProgressColors,
     this.materialProgressColors,
     this.showControls = true,
@@ -101,6 +101,9 @@ class ChewieAudioController extends ChangeNotifier {
 
   /// Whether or not the video should loop
   final bool looping;
+
+  /// playback screen size
+  final double aspectRatio;
 
   /// Whether or not to show the controls at all
   final bool showControls;

@@ -42,11 +42,7 @@ class _ChewieAudioDemoState extends State<ChewieAudioDemo> {
     _videoPlayerController = VideoPlayerController.network('https://www.w3schools.com/html/mov_bbb.mp4');
     await _videoPlayerController.initialize();
     _chewieAudioController = ChewieAudioController(
-      thumbnail: Container(
-        width: double.infinity,
-        height: 200,
-        color: Colors.white,
-      ),
+      thumbnail: const Text('サムネイル'),
       videoPlayerController: _videoPlayerController,
     );
   }

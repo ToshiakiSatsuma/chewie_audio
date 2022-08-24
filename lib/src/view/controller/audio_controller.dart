@@ -105,12 +105,7 @@ class _AudioControllerState extends State<AudioController> with SingleTickerProv
                 if (chewieController.showOptions)
                   Positioned(
                     bottom: 0,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 30,
-                      ),
-                      child: _buildBottomBar(context),
-                    ),
+                    child: _buildBottomBar(context),
                   ),
               ],
             ),
@@ -199,7 +194,7 @@ class _AudioControllerState extends State<AudioController> with SingleTickerProv
       },
       icon: const Icon(
         Icons.more_vert,
-        color: Colors.white,
+        color: Colors.grey,
       ),
     );
   }
@@ -215,14 +210,14 @@ class _AudioControllerState extends State<AudioController> with SingleTickerProv
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildTimerPosition(iconColor),
+          _buildTimerPosition(),
           _buildProgressBar(),
         ],
       ),
     );
   }
 
-  Widget _buildTimerPosition(Color? iconColor) {
+  Widget _buildTimerPosition() {
     final position = _latestValue.position;
     final duration = _latestValue.duration;
 
@@ -287,7 +282,7 @@ class _AudioControllerState extends State<AudioController> with SingleTickerProv
           });
         } else {
           if (isFinished) {
-            controller.seekTo(const Duration());
+            controller.seekTo(Duration.zero);
           }
           controller.play();
         }
@@ -375,52 +370,4 @@ class _AudioControllerState extends State<AudioController> with SingleTickerProv
 //     ),
 //   );
 // }
-}
-
-class _PlaybackSpeedDialog extends StatelessWidget {
-  const _PlaybackSpeedDialog({
-    Key? key,
-    required List<double> speeds,
-    required double selected,
-  })  : _speeds = speeds,
-        _selected = selected,
-        super(key: key);
-
-  final List<double> _speeds;
-  final double _selected;
-
-  @override
-  Widget build(BuildContext context) {
-    final Color selectedColor = Theme.of(context).primaryColor;
-
-    return ListView.builder(
-      shrinkWrap: true,
-      physics: const ScrollPhysics(),
-      itemBuilder: (context, index) {
-        final _speed = _speeds[index];
-        return ListTile(
-          dense: true,
-          title: Row(
-            children: [
-              if (_speed == _selected)
-                Icon(
-                  Icons.check,
-                  size: 20.0,
-                  color: selectedColor,
-                )
-              else
-                Container(width: 20.0),
-              const SizedBox(width: 16.0),
-              Text(_speed.toString()),
-            ],
-          ),
-          selected: _speed == _selected,
-          onTap: () {
-            Navigator.of(context).pop(_speed);
-          },
-        );
-      },
-      itemCount: _speeds.length,
-    );
-  }
 }
