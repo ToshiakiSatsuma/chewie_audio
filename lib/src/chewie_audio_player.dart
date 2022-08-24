@@ -9,13 +9,6 @@ import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
 
-typedef ChewieRoutePageBuilder = Widget Function(
-  BuildContext context,
-  Animation<double> animation,
-  Animation<double> secondaryAnimation,
-  ChewieAudioControllerProvider controllerProvider,
-);
-
 /// An Audio Player with Material and Cupertino skins.
 ///
 /// `video_player` is pretty low level. ChewieAudio wraps it in a friendly skin to
