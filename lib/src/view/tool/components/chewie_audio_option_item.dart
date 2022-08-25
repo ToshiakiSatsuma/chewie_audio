@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class AudioOptionItem {
-  AudioOptionItem({
+class ChewieAudioOptionItem {
+  ChewieAudioOptionItem({
     required this.onTap,
     required this.iconData,
     required this.title,
@@ -13,13 +13,13 @@ class AudioOptionItem {
   String title;
   String? subtitle;
 
-  AudioOptionItem copyWith({
+  ChewieAudioOptionItem copyWith({
     Function()? onTap,
     IconData? iconData,
     String? title,
     String? subtitle,
   }) {
-    return AudioOptionItem(
+    return ChewieAudioOptionItem(
       onTap: onTap ?? this.onTap,
       iconData: iconData ?? this.iconData,
       title: title ?? this.title,
@@ -35,7 +35,7 @@ class AudioOptionItem {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is AudioOptionItem &&
+    return other is ChewieAudioOptionItem &&
         other.onTap == onTap &&
         other.iconData == iconData &&
         other.title == title &&

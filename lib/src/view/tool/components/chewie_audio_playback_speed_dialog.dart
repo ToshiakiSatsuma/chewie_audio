@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
-class AudioPlaybackSpeedDialog extends StatelessWidget {
-  const AudioPlaybackSpeedDialog({
+class ChewieAudioPlaybackSpeedDialog extends StatelessWidget {
+  const ChewieAudioPlaybackSpeedDialog({
     Key? key,
-    required this.speeds,
+    required this.chewie_speeds,
     required this.selectedColor,
     required this.selected,
   }) : super(key: key);
 
-  final List<double>speeds;
+  final List<double>chewie_speeds;
   final Color selectedColor;
   final double selected;
 
@@ -17,9 +17,9 @@ class AudioPlaybackSpeedDialog extends StatelessWidget {
     return ListView.builder(
       shrinkWrap: true,
       physics: const ScrollPhysics(),
-      itemCount: speeds.length,
+      itemCount: chewie_speeds.length,
       itemBuilder: (context, index) {
-        final speed = speeds[index];
+        final speed = chewie_speeds[index];
         return ListTile(
           dense: true,
           title: Row(

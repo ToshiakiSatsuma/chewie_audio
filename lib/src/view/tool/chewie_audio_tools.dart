@@ -3,26 +3,26 @@ import 'dart:async';
 import 'package:chewie_audio/src/chewie_audio_player.dart';
 import 'package:chewie_audio/src/chewie_progress_colors.dart';
 import 'package:chewie_audio/src/notifiers/play_notifier.dart';
-import 'package:chewie_audio/src/view/controller/components/audio_play_button.dart';
-import 'package:chewie_audio/src/view/controller/components/audio_progress_bar.dart';
-import 'package:chewie_audio/src/view/controller/components/audio_option_dialog.dart';
-import 'package:chewie_audio/src/view/controller/components/audio_option_item.dart';
-import 'package:chewie_audio/src/view/controller/components/audio_playback_speed_dialog.dart';
-import 'package:chewie_audio/src/view/controller/components/audio_time_position.dart';
+import 'package:chewie_audio/src/view/tool/components/chewie_audio_play_button.dart';
+import 'package:chewie_audio/src/view/tool/components/chewie_audio_progress_bar.dart';
+import 'package:chewie_audio/src/view/tool/components/chewie_audio_option_dialog.dart';
+import 'package:chewie_audio/src/view/tool/components/chewie_audio_option_item.dart';
+import 'package:chewie_audio/src/view/tool/components/chewie_audio_playback_speed_dialog.dart';
+import 'package:chewie_audio/src/view/tool/components/chewie_audio_time_position.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
 
-class AudioController extends StatefulWidget {
-  const AudioController({Key? key}) : super(key: key);
+class ChewieAudioTools extends StatefulWidget {
+  const ChewieAudioTools({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
-    return _AudioControllerState();
+    return _ChewieAudioToolsState();
   }
 }
 
-class _AudioControllerState extends State<AudioController> with SingleTickerProviderStateMixin {
+class _ChewieAudioToolsState extends State<ChewieAudioTools> with SingleTickerProviderStateMixin {
   late PlayerNotifier notifier;
   late VideoPlayerValue _latestValue;
   Timer? _hideTimer;
@@ -139,9 +139,9 @@ class _AudioControllerState extends State<AudioController> with SingleTickerProv
       child: AnimatedOpacity(
         opacity: _dragging ? 0.0 : 1.0,
         duration: const Duration(milliseconds: 300),
-        child: AudioPlayButton(
+        child: ChewieAudioPlayButton(
           backgroundColor: Colors.black54,
-          iconColor: Colors.white,
+          foregroundColor: Colors.white,
           isFinished: isFinished,
           isPlaying: controller.value.isPlaying,
           show: !_dragging && !notifier.hideStuff,
@@ -156,21 +156,21 @@ class _AudioControllerState extends State<AudioController> with SingleTickerProv
       onPressed: () async {
         _hideTimer?.cancel();
 
-        await showModalBottomSheet<AudioOptionItem>(
+        await showModalBottomSheet<ChewieAudioOptionItem>(
           context: context,
           isScrollControlled: true,
           useRootNavigator: true,
-          builder: (context) => AudioOptionsDialog(
-            options: <AudioOptionItem>[
-              AudioOptionItem(
+          builder: (context) => ChewieAudioOptionsDialog(
+            options: <ChewieAudioOptionItem>[
+              ChewieAudioOptionItem(
                 onTap: () async {
                   Navigator.pop(context);
                   final chosenSpeed = await showModalBottomSheet<double>(
                     context: context,
                     isScrollControlled: true,
                     useRootNavigator: true,
-                    builder: (context) => AudioPlaybackSpeedDialog(
-                      speeds: chewieController.playbackSpeeds,
+                    builder: (context) => ChewieAudioPlaybackSpeedDialog(
+                      chewie_speeds: chewieController.playbackSpeeds,
                       selectedColor: Theme.of(context).primaryColor,
                       selected: _latestValue.playbackSpeed,
                     ),
@@ -223,7 +223,7 @@ class _AudioControllerState extends State<AudioController> with SingleTickerProv
 
     return Padding(
       padding: const EdgeInsets.only(left: 20.0),
-      child: AudioTimePosition(
+      child: ChewieAudioTimePosition(
         position: position,
         duration: duration,
       ),
@@ -236,7 +236,7 @@ class _AudioControllerState extends State<AudioController> with SingleTickerProv
         padding: const EdgeInsets.symmetric(
           horizontal: 20.0,
         ),
-        child: AudioProgressBar(
+        child: ChewieAudioProgressBar(
           controller: controller,
           onDragStart: () {
             setState(() {
@@ -253,7 +253,7 @@ class _AudioControllerState extends State<AudioController> with SingleTickerProv
             _startHideTimer();
           },
           colors: chewieController.materialProgressColors ??
-              ChewieProgressColors(
+              ChewieAudioProgressColors(
                 playedColor: Theme.of(context).accentColor,
                 handleColor: Theme.of(context).accentColor,
                 bufferedColor: Theme.of(context).backgroundColor,
@@ -327,7 +327,7 @@ class _AudioControllerState extends State<AudioController> with SingleTickerProv
 
 // NOTE(ToshiakiSatsuma): 今後同様の機能を実装する際参考にできるため残しておく
 // Widget _buildSpeedButton(
-//   VideoPlayerController controller,
+//   VideoPlayerController tool,
 // ) {
 //   return GestureDetector(
 //     onTap: () async {
@@ -342,7 +342,7 @@ class _AudioControllerState extends State<AudioController> with SingleTickerProv
 //       );
 //
 //       if (chosenSpeed != null) {
-//         controller.setPlaybackSpeed(chosenSpeed);
+//         tool.setPlaybackSpeed(chosenSpeed);
 //       }
 //     },
 //     child: AudioSpeedButton(
@@ -353,15 +353,15 @@ class _AudioControllerState extends State<AudioController> with SingleTickerProv
 
 // NOTE(ToshiakiSatsuma): 今後同様の機能を実装する際参考にできるため残しておく
 // GestureDetector _buildMuteButton(
-//   VideoPlayerController controller,
+//   VideoPlayerController tool,
 // ) {
 //   return GestureDetector(
 //     onTap: () {
 //       if (_latestValue.volume == 0) {
-//         controller.setVolume(_latestVolume ?? 0.5);
+//         tool.setVolume(_latestVolume ?? 0.5);
 //       } else {
-//         _latestVolume = controller.value.volume;
-//         controller.setVolume(0.0);
+//         _latestVolume = tool.value.volume;
+//         tool.setVolume(0.0);
 //       }
 //     },
 //     child: AudioMuteButton(

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 /// A widget that animates implicitly between a play and a pause icon.
-class AnimatedPlayPause extends StatefulWidget {
-  const AnimatedPlayPause({
+class ChewieAudioPlayButtonIcon extends StatefulWidget {
+  const ChewieAudioPlayButtonIcon({
     Key? key,
     required this.playing,
     this.size,
@@ -14,10 +14,10 @@ class AnimatedPlayPause extends StatefulWidget {
   final Color? color;
 
   @override
-  State<StatefulWidget> createState() => AnimatedPlayPauseState();
+  State<StatefulWidget> createState() => ChewieAudioPlayButtonIconState();
 }
 
-class AnimatedPlayPauseState extends State<AnimatedPlayPause>
+class ChewieAudioPlayButtonIconState extends State<ChewieAudioPlayButtonIcon>
     with SingleTickerProviderStateMixin {
   late final animationController = AnimationController(
     vsync: this,
@@ -26,7 +26,7 @@ class AnimatedPlayPauseState extends State<AnimatedPlayPause>
   );
 
   @override
-  void didUpdateWidget(AnimatedPlayPause oldWidget) {
+  void didUpdateWidget(ChewieAudioPlayButtonIcon oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.playing != oldWidget.playing) {
       if (widget.playing) {

@@ -1,8 +1,8 @@
 import 'package:chewie_audio/src/utils/string_util.dart';
 import 'package:flutter/material.dart';
 
-class AudioTimePosition extends StatelessWidget {
-  const AudioTimePosition({
+class ChewieAudioTimePosition extends StatelessWidget {
+  const ChewieAudioTimePosition({
     Key? key,
     required this.position,
     required this.duration,

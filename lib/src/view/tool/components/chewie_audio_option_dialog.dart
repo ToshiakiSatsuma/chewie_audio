@@ -1,21 +1,21 @@
-import 'package:chewie_audio/src/view/controller/components/audio_option_item.dart';
+import 'package:chewie_audio/src/view/tool/components/chewie_audio_option_item.dart';
 import 'package:flutter/material.dart';
 
-class AudioOptionsDialog extends StatefulWidget {
-  const AudioOptionsDialog({
+class ChewieAudioOptionsDialog extends StatefulWidget {
+  const ChewieAudioOptionsDialog({
     Key? key,
     required this.options,
     this.cancelButtonText,
   }) : super(key: key);
 
-  final List<AudioOptionItem> options;
+  final List<ChewieAudioOptionItem> options;
   final String? cancelButtonText;
 
   @override
-  _AudioOptionsDialogState createState() => _AudioOptionsDialogState();
+  _ChewieAudioOptionsDialogState createState() => _ChewieAudioOptionsDialogState();
 }
 
-class _AudioOptionsDialogState extends State<AudioOptionsDialog> {
+class _ChewieAudioOptionsDialogState extends State<ChewieAudioOptionsDialog> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(

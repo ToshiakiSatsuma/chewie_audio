@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:video_player/video_player.dart';
 
-class AudioProgressBar extends StatefulWidget {
-  AudioProgressBar({
+class ChewieAudioProgressBar extends StatefulWidget {
+  ChewieAudioProgressBar({
     required this.controller,
-    ChewieProgressColors? colors,
+    ChewieAudioProgressColors? colors,
     this.onDragEnd,
     this.onDragStart,
     this.onDragUpdate,
@@ -14,11 +14,11 @@ class AudioProgressBar extends StatefulWidget {
     required this.handleHeight,
     required this.drawShadow,
     Key? key,
-  })  : colors = colors ?? ChewieProgressColors(),
+  })  : colors = colors ?? ChewieAudioProgressColors(),
         super(key: key);
 
   final VideoPlayerController controller;
-  final ChewieProgressColors colors;
+  final ChewieAudioProgressColors colors;
   final Function()? onDragStart;
   final Function()? onDragEnd;
   final Function()? onDragUpdate;
@@ -27,12 +27,12 @@ class AudioProgressBar extends StatefulWidget {
   final double handleHeight;
   final bool drawShadow;
   @override
-  _AudioProgressBarState createState() {
-    return _AudioProgressBarState();
+  _ChewieAudioProgressBarState createState() {
+    return _ChewieAudioProgressBarState();
   }
 }
 
-class _AudioProgressBarState extends State<AudioProgressBar> {
+class _ChewieAudioProgressBarState extends State<ChewieAudioProgressBar> {
   void listener() {
     if (!mounted) return;
     setState(() {});
@@ -129,7 +129,7 @@ class _ProgressBarPainter extends CustomPainter {
   });
 
   VideoPlayerValue value;
-  ChewieProgressColors colors;
+  ChewieAudioProgressColors colors;
 
   final double barHeight;
   final double handleHeight;

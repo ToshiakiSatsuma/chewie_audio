@@ -41,7 +41,7 @@ class ChewieAudioPlayer extends StatelessWidget {
                   children: <Widget>[
                     chewieAudioController.thumbnail,
                     if (chewieAudioController.showControls)
-                      chewieAudioController.customControls ?? const AudioController()
+                      chewieAudioController.customControls ?? const ChewieAudioTools()
                     else
                       Container(),
                   ],
@@ -89,7 +89,7 @@ class ChewieAudioController extends ChangeNotifier {
     _initialize();
   }
 
-  /// The controller for the video you want to play
+  /// The tool for the video you want to play
   final VideoPlayerController videoPlayerController;
 
   final Widget thumbnail;
@@ -128,11 +128,11 @@ class ChewieAudioController extends ChangeNotifier {
 
   /// The colors to use for controls on iOS. By default, the iOS player uses
   /// colors sampled from the original iOS 11 designs.
-  final ChewieProgressColors? cupertinoProgressColors;
+  final ChewieAudioProgressColors? cupertinoProgressColors;
 
   /// The colors to use for the Material Progress Bar. By default, the Material
   /// player uses the colors from your Theme.
-  final ChewieProgressColors? materialProgressColors;
+  final ChewieAudioProgressColors? materialProgressColors;
 
   /// Defines if the controls should be for live stream video
   final bool isLive;
