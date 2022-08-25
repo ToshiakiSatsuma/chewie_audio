@@ -326,7 +326,7 @@ class _ChewieAudioToolsState extends State<ChewieAudioTools> with SingleTickerPr
     _showAfterExpandCollapseTimer?.cancel();
   }
 
-// NOTE(ToshiakiSatsuma): 今後同様の機能を実装する際参考にできるため残しておく
+  // NOTE(ToshiakiSatsuma): 今後同様の機能を実装する際参考にできるため残しておく
   Widget _buildSpeedButton(
     VideoPlayerController tool,
   ) {
@@ -351,7 +351,7 @@ class _ChewieAudioToolsState extends State<ChewieAudioTools> with SingleTickerPr
     );
   }
 
-// NOTE(ToshiakiSatsuma): 今後同様の機能を実装する際参考にできるため残しておく
+  // NOTE(ToshiakiSatsuma): 今後同様の機能を実装する際参考にできるため残しておく
   Widget _buildMuteButton(
     VideoPlayerController tool,
   ) {
