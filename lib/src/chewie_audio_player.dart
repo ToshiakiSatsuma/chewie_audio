@@ -40,7 +40,7 @@ class ChewieAudioPlayer extends StatelessWidget {
                   alignment: Alignment.center,
                   children: <Widget>[
                     chewieAudioController.thumbnail,
-                    if (chewieAudioController.showControls)
+                    if (chewieAudioController.showTools)
                       chewieAudioController.customControls ?? const ChewieAudioTools()
                     else
                       Container(),
@@ -77,7 +77,7 @@ class ChewieAudioController extends ChangeNotifier {
     this.aspectRatio = 16 / 9,
     this.cupertinoProgressColors,
     this.materialProgressColors,
-    this.showControls = true,
+    this.showTools = true,
     this.customControls,
     this.showOptions = true,
     this.errorBuilder,
@@ -112,7 +112,7 @@ class ChewieAudioController extends ChangeNotifier {
   final double aspectRatio;
 
   /// Whether or not to show the controls at all
-  final bool showControls;
+  final bool showTools;
 
   /// Defines customised controls. Check [MaterialControls] or
   /// [CupertinoControls] for reference.

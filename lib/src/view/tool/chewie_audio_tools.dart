@@ -3,11 +3,13 @@ import 'dart:async';
 import 'package:chewie_audio/src/chewie_audio_player.dart';
 import 'package:chewie_audio/src/chewie_progress_colors.dart';
 import 'package:chewie_audio/src/notifiers/play_notifier.dart';
+import 'package:chewie_audio/src/view/tool/components/chewie_audio_mute_button.dart';
 import 'package:chewie_audio/src/view/tool/components/chewie_audio_play_button.dart';
 import 'package:chewie_audio/src/view/tool/components/chewie_audio_progress_bar.dart';
 import 'package:chewie_audio/src/view/tool/components/chewie_audio_option_dialog.dart';
 import 'package:chewie_audio/src/view/tool/components/chewie_audio_option_item.dart';
 import 'package:chewie_audio/src/view/tool/components/chewie_audio_playback_speed_dialog.dart';
+import 'package:chewie_audio/src/view/tool/components/chewie_audio_speed_button.dart';
 import 'package:chewie_audio/src/view/tool/components/chewie_audio_time_position.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -25,6 +27,7 @@ class ChewieAudioTools extends StatefulWidget {
 class _ChewieAudioToolsState extends State<ChewieAudioTools> with SingleTickerProviderStateMixin {
   late PlayerNotifier notifier;
   late VideoPlayerValue _latestValue;
+  double? _latestVolume;
   Timer? _hideTimer;
   Timer? _showAfterExpandCollapseTimer;
   bool _dragging = false;
@@ -70,7 +73,7 @@ class _ChewieAudioToolsState extends State<ChewieAudioTools> with SingleTickerPr
     if (_latestValue.hasError) {
       return chewieController.errorBuilder?.call(
             context,
-            chewieController.videoPlayerController.value.errorDescription!,
+            chewieController.videoPlayerController.value.errorDescription,
           ) ??
           const Center(
             child: Icon(
@@ -202,8 +205,6 @@ class _ChewieAudioToolsState extends State<ChewieAudioTools> with SingleTickerPr
   Widget _buildBottomBar(
     BuildContext context,
   ) {
-    final iconColor = Theme.of(context).textTheme.button!.color;
-
     return SizedBox(
       width: MediaQuery.of(context).size.width,
       height: barHeight,
@@ -254,8 +255,8 @@ class _ChewieAudioToolsState extends State<ChewieAudioTools> with SingleTickerPr
           },
           colors: chewieController.materialProgressColors ??
               ChewieAudioProgressColors(
-                playedColor: Theme.of(context).accentColor,
-                handleColor: Theme.of(context).accentColor,
+                playedColor: Theme.of(context).colorScheme.secondary,
+                handleColor: Theme.of(context).colorScheme.secondary,
                 bufferedColor: Theme.of(context).backgroundColor,
                 backgroundColor: Theme.of(context).disabledColor,
               ),
@@ -326,48 +327,45 @@ class _ChewieAudioToolsState extends State<ChewieAudioTools> with SingleTickerPr
   }
 
 // NOTE(ToshiakiSatsuma): 今後同様の機能を実装する際参考にできるため残しておく
-// Widget _buildSpeedButton(
-//   VideoPlayerController tool,
-// ) {
-//   return GestureDetector(
-//     onTap: () async {
-//       final chosenSpeed = await showModalBottomSheet<double>(
-//         context: context,
-//         isScrollControlled: true,
-//         useRootNavigator: true,
-//         builder: (context) => _PlaybackSpeedDialog(
-//           speeds: chewieController.playbackSpeeds,
-//           selected: _latestValue.playbackSpeed,
-//         ),
-//       );
-//
-//       if (chosenSpeed != null) {
-//         tool.setPlaybackSpeed(chosenSpeed);
-//       }
-//     },
-//     child: AudioSpeedButton(
-//       height: barHeight,
-//     ),
-//   );
-// }
+  Widget _buildSpeedButton(
+    VideoPlayerController tool,
+  ) {
+    return ChewieAudioSpeedButton(
+      height: barHeight,
+      onTap: () async {
+        final chosenSpeed = await showModalBottomSheet<double>(
+          context: context,
+          isScrollControlled: true,
+          useRootNavigator: true,
+          builder: (context) => ChewieAudioPlaybackSpeedDialog(
+            chewie_speeds: chewieController.playbackSpeeds,
+            selectedColor: Theme.of(context).primaryColor,
+            selected: _latestValue.playbackSpeed,
+          ),
+        );
+
+        if (chosenSpeed != null) {
+          tool.setPlaybackSpeed(chosenSpeed);
+        }
+      },
+    );
+  }
 
 // NOTE(ToshiakiSatsuma): 今後同様の機能を実装する際参考にできるため残しておく
-// GestureDetector _buildMuteButton(
-//   VideoPlayerController tool,
-// ) {
-//   return GestureDetector(
-//     onTap: () {
-//       if (_latestValue.volume == 0) {
-//         tool.setVolume(_latestVolume ?? 0.5);
-//       } else {
-//         _latestVolume = tool.value.volume;
-//         tool.setVolume(0.0);
-//       }
-//     },
-//     child: AudioMuteButton(
-//       height: barHeight,
-//       iconData: _latestValue.volume > 0 ? Icons.volume_up : Icons.volume_off,
-//     ),
-//   );
-// }
+  Widget _buildMuteButton(
+    VideoPlayerController tool,
+  ) {
+    return ChewieAudioMuteButton(
+      height: barHeight,
+      iconData: _latestValue.volume > 0 ? Icons.volume_up : Icons.volume_off,
+      onTap: () {
+        if (_latestValue.volume == 0) {
+          tool.setVolume(_latestVolume ?? 0.5);
+        } else {
+          _latestVolume = tool.value.volume;
+          tool.setVolume(0.0);
+        }
+      },
+    );
+  }
 }

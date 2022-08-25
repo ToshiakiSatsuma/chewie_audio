@@ -5,20 +5,25 @@ class ChewieAudioSpeedButton extends StatelessWidget {
   const ChewieAudioSpeedButton({
     Key? key,
     required this.height,
+    this.onTap,
   }) : super(key: key);
 
   final double height;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
-    return ClipRect(
-      child: Container(
-        height: height,
-        padding: const EdgeInsets.only(
-          left: 8.0,
-          right: 8.0,
+    return GestureDetector(
+      onTap: onTap,
+      child: ClipRect(
+        child: Container(
+          height: height,
+          padding: const EdgeInsets.only(
+            left: 8.0,
+            right: 8.0,
+          ),
+          child: const Icon(Icons.speed),
         ),
-        child: const Icon(Icons.speed),
       ),
     );
   }

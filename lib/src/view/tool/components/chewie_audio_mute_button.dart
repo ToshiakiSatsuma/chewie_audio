@@ -6,22 +6,27 @@ class ChewieAudioMuteButton extends StatelessWidget {
     Key? key,
     required this.height,
     required this.iconData,
+    this.onTap,
   }) : super(key: key);
 
   final double height;
   final IconData iconData;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
-    return ClipRect(
-      child: Container(
-        height: height,
-        padding: const EdgeInsets.only(
-          left: 8.0,
-          right: 8.0,
-        ),
-        child: Icon(
-          iconData,
+    return GestureDetector(
+      onTap: onTap,
+      child: ClipRect(
+        child: Container(
+          height: height,
+          padding: const EdgeInsets.only(
+            left: 8.0,
+            right: 8.0,
+          ),
+          child: Icon(
+            iconData,
+          ),
         ),
       ),
     );
